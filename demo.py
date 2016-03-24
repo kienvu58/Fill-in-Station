@@ -28,7 +28,7 @@ class Problem:
     def select_unassigned_variable(self, assignment):
         unassigned_variable = [var for var in self.variables 
                                     if var not in assignment.keys()]
-        var = unassigned_variable.pop()
+        var = unassigned_variable.pop(0)
         return var
 
 
@@ -42,7 +42,7 @@ def backtracking_search(problem):
     return recursive_backtracking({}, problem)
 
 def recursive_backtracking(assignment, problem):
-
+    print_matrix(assignment)
     if problem.is_goal_state(assignment):
         return assignment
     var = problem.select_unassigned_variable(assignment)
@@ -57,6 +57,20 @@ def recursive_backtracking(assignment, problem):
             problem.domain.insert(index, value)
         del assignment[var] 
     return None
+    
+def print_matrix(assignment):
+    matrix = (('11', '12', '13'),
+              ('21', '22', '23'),
+              ('31', '32', '33'))
+    for row in matrix:
+        word = ""
+        for col in row:
+            if col in assignment.keys():
+                word += assignment[col]
+            else:
+                word += "*"
+        print word
+    print ""
 
 if __name__ == "__main__":
     dom = ['A', 'E', 'O',
@@ -75,9 +89,9 @@ if __name__ == "__main__":
                         '31': 'W', '32': 'R', '33': 'Y'} 
     wrong_incomplete = {'32': 'R', '31': 'W', '33': 'Y',
                         '11': 'S', '12': 'O', '13': 'P'}
-    print problem.check_contraints(right_assignment)
-    print problem.check_contraints(incomplete_assignment)
-    print problem.check_contraints(wrong_assignment)
-    print problem.check_contraints(wrong_incomplete)
+    # print problem.check_contraints(right_assignment)
+    # print problem.check_contraints(incomplete_assignment)
+    # print problem.check_contraints(wrong_assignment)
+    # print problem.check_contraints(wrong_incomplete)
 
-    print backtracking_search(problem)
+    print_matrix(backtracking_search(problem))
