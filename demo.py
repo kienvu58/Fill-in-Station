@@ -9,26 +9,26 @@ class Problem:
         self.count = 0
 
     def check_contraints(self, assignment):
-        isConsistent = True
-        contraints = (('11', '12', '13'), ('21', '22', '23'), ('31', '32', '33'),
-                      ('11', '21', '31'), ('12', '22', '32'), ('13', '23', '33'),
-                      ('11', '22', '33'), ('13', '22', '31'))
+        contraints = (
+            ('11', '12', '13'), ('21', '22', '23'), ('31', '32', '33'),
+            ('11', '21', '31'), ('12', '22', '32'), ('13', '23', '33'),
+            ('11', '22', '33'), ('13', '22', '31'))
 
         for contraint in contraints:
             if all(key in assignment.keys() for key in contraint):
                 word = "".join(assignment[key] for key in contraint)
                 if word not in self.dictionary:
-                    isConsistent = False
+                    return False
 
-        return isConsistent
+        return True
 
     def is_goal_state(self, state):
         return len(state) == 9
 
     def select_unassigned_variable(self, assignment):
-        unassigned_variable = [var for var in self.variables 
-                                    if var not in assignment.keys()]
-        var = unassigned_variable.pop(0)
+        unassigned_variable = [var for var in self.variables
+                               if var not in assignment.keys()]
+        var = unassigned_variable.pop()
         return var
 
 
@@ -38,11 +38,12 @@ def get_dictionary(filename):
         dictionary.add(line.strip())
     return dictionary
 
+
 def backtracking_search(problem):
     return recursive_backtracking({}, problem)
 
+
 def recursive_backtracking(assignment, problem):
-    print_matrix(assignment)
     if problem.is_goal_state(assignment):
         return assignment
     var = problem.select_unassigned_variable(assignment)
@@ -55,9 +56,10 @@ def recursive_backtracking(assignment, problem):
             if result is not None:
                 return result
             problem.domain.insert(index, value)
-        del assignment[var] 
+        del assignment[var]
     return None
-    
+
+
 def print_matrix(assignment):
     matrix = (('11', '12', '13'),
               ('21', '22', '23'),
@@ -86,7 +88,7 @@ if __name__ == "__main__":
                              '31': 'W', '32': 'R'}
     wrong_assignment = {'11': 'S', '12': 'O', '13': 'R',
                         '21': 'E', '22': 'A', '23': 'P',
-                        '31': 'W', '32': 'R', '33': 'Y'} 
+                        '31': 'W', '32': 'R', '33': 'Y'}
     wrong_incomplete = {'32': 'R', '31': 'W', '33': 'Y',
                         '11': 'S', '12': 'O', '13': 'P'}
     # print problem.check_contraints(right_assignment)
