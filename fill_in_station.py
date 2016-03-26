@@ -93,7 +93,7 @@ class FillinStationProblem:
             next_state = state.copy()
             next_state.update({self.variables[next_var_index]: value})
             if self.check_contraints(next_state):
-                successors.push(next_state, - heuristic)
+                successors.push(next_state, heuristic)
 
         return successors
 
@@ -118,7 +118,14 @@ class FillinStationProblem:
         Returns heuristic value for assigning next variable from current
         state.
         """
-        return 1
+        heuristic = 1
+        if next_var_index in (0, 3, 6):
+            heuristic *= self.bigram_freq[('$', next_value)]
+        else:
+            prev_value = state[self.variables[next_var_index - 1]]
+            heuristic *= self.bigram_freq[(prev_value, next_value)]
+
+        return - heuristic
 
 
 def backtracking_search(problem, trace_fn=None):
@@ -128,7 +135,6 @@ def backtracking_search(problem, trace_fn=None):
     Use heuristic to choose which value goes first.
     """
     def recursive_backtracking(state, problem, trace_fn):
-        problem.count += 1
         if problem.is_goal_state(state):
             return state
 
@@ -140,14 +146,15 @@ def backtracking_search(problem, trace_fn=None):
             result = recursive_backtracking(next_state, problem, trace_fn)
             if result is not None:
                 return result
-
+        problem.count += 1
         if trace_fn is not None:
-            print_trace(trace_fn, state, next_state, children)
+            print_trace(trace_fn, state, children, problem.count)
 
         return None
 
     def print_trace(trace_fn, parent, children, n_nodes):
-        pass
+        f = open(trace_fn, 'a')
+        f.write(str(n_nodes))
 
     return recursive_backtracking({}, problem, trace_fn)
 
@@ -202,7 +209,7 @@ if __name__ == "__main__":
             'L', 'P', 'Y']
     dict = get_dictionary('3_letters_dictionary')
     bigram_freq = get_bigram_freq('bigram_frequence_list')
-    problem = FillinStationProblem(dom2, dict, bigram_freq)
+    problem = FillinStationProblem(dom1, dict, bigram_freq)
     right_assignment = {'11': 'S', '12': 'O', '13': 'P',
                         '21': 'E', '22': 'A', '23': 'R',
                         '31': 'W', '32': 'R', '33': 'Y'}
@@ -218,6 +225,10 @@ if __name__ == "__main__":
     # print problem.check_contraints(incomplete_assignment)
     # print problem.check_contraints(wrong_assignment)
     # print problem.check_contraints(wrong_incomplete)
+
     result = backtracking_search(problem)
-    print_matrix(result)
+    if result is not None:
+        print_matrix(result)
+    else:
+        print "Cannot find any solution!"
     print problem.count
