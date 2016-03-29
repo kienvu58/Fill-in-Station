@@ -3,14 +3,14 @@ import heapq
 
 class PriorityQueue:
     """
-      Implements a priority queue data structure. Each inserted item
-      has a priority associated with it and the client is usually interested
-      in quick retrieval of the lowest-priority item in the queue. This
-      data structure allows O(1) access to the lowest-priority item.
+    Implements a priority queue data structure. Each inserted item
+    has a priority associated with it and the client is usually interested
+    in quick retrieval of the lowest-priority item in the queue. This
+    data structure allows O(1) access to the lowest-priority item.
 
-      Note that this PriorityQueue does not allow you to change the priority
-      of an item.  However, you may insert the same item multiple times with
-      different priorities.
+    Note that this PriorityQueue does not allow you to change the priority
+    of an item.  However, you may insert the same item multiple times with
+    different priorities.
     """
 
     def __init__(self):
@@ -115,13 +115,19 @@ class FillinStationProblem:
         return True
 
 
+def trivial_heuristic(bigram_freq, variables, state, next_index, next_value):
+    """
+    This is a trivial heuristic, it always returns constant value.
+    """
+    return 1
+
+
 def normal_heuristic(bigram_freq, variables, state, next_index, next_value):
     """
         state: current state
         next_index: next variable position in matrix
         next_value: value of next variable need to calculate heuristic
-    Returns heuristic value for assigning next variable from current
-    state.
+    Returns heuristic value for assigning next variable from current state.
     This is a simple heuristic function.
     """
     heuristic = 1
@@ -139,8 +145,7 @@ def advanced_heuristic(bigram_freq, variables, state, next_index, next_value):
         state: current state
         next_index: next variable position in matrix
         next_value: value of next variable need to calculate heuristic
-    Returns heuristic value for assigning next variable from current
-    state.
+    Returns heuristic value for assigning next variable from current state.
     This is an advanced heuristic function.
     """
     heuristic = 1
@@ -169,13 +174,13 @@ def advanced_heuristic(bigram_freq, variables, state, next_index, next_value):
     return - heuristic
 
 
-def backtracking_search(problem, heuristic_fn=advanced_heuristic, log=None):
+def backtracking_search(problem, heuristic_fn, trace):
     """
-        log: name of trace file, None means no trace
+        trace: True turn on traces, False turn off traces
     Returns a solution for fill-in station problem.
     Use heuristic to choose which value goes first.
     """
-    def recursive_backtracking(state, problem, heuristic_fn, log):
+    def recursive_backtracking(state, problem, heuristic_fn, trace):
         problem.count += 1
         if problem.is_goal_state(state):
             return state
@@ -183,53 +188,66 @@ def backtracking_search(problem, heuristic_fn=advanced_heuristic, log=None):
         successors = problem.get_successors(state, heuristic_fn)
         children = successors.heap[:]
 
-        if log is not None:
-            print_trace(log, state, children, problem.count)
+        if trace:
+            print_trace(state, children)
 
         while not successors.isEmpty():
             next_state = successors.pop()
             result = recursive_backtracking(
-                next_state, problem, heuristic_fn, log)
+                next_state, problem, heuristic_fn, trace)
 
             if result is not None:
                 return result
 
         return None
 
-    def print_trace(log, parent, children, n_nodes):
-        f = open(log, 'a')
-        f.write(str(n_nodes) + '\n')
-
-    return recursive_backtracking({}, problem, heuristic_fn, log)
+    def print_trace(parent, children):
+        print "======================================="
+        print "Current state, depth %i:" % len(parent)
+        print_matrix(parent)
+        if children:
+            count = 0
+            for child in children:
+                count += 1
+                print "Child %i, heuristic = %0.18f:" % (count, child[0])
+                print_matrix(child[2])
+        else:
+            print "No child!"
+    func = {'advanced_heuristic': advanced_heuristic,
+            'normal_heuristic': normal_heuristic,
+            'trivial_heuristic': trivial_heuristic}
+    return recursive_backtracking({}, problem, func[heuristic_fn], trace)
 
 
 def get_dictionary(filename):
     """
         filename: name of dictionary file
-    Returns a set contains 3-letters words
+    Returns a set contains 3-letters words.
     """
     dictionary = set()
-    for line in open(filename, 'r'):
-        dictionary.add(line.strip())
+    with open(filename, 'r') as f:
+        for line in f:
+            dictionary.add(line.strip())
     return dictionary
 
 
 def get_bigram_freq(filename):
     """
         filename: name of frequencies file
-    Returns a set contains bigram frequencies
+    Returns a set contains bigram frequencies.
     """
     bigram_freq = {}
-    for line in open(filename, 'r'):
-        first, second, freq = line.split()
-        bigram_freq[(first, second)] = float(freq)
+    with open(filename, 'r') as f:
+        for line in f:
+            first, second, freq = line.split()
+            bigram_freq[(first, second)] = float(freq)
     return bigram_freq
 
 
 def print_matrix(state):
     """
         state: current state
-    Prints a matrix from current state
+    Prints a matrix from current state.
     """
     matrix = (('11', '12', '13'),
               ('21', '22', '23'),
@@ -244,20 +262,55 @@ def print_matrix(state):
         print word
     print ""
 
-if __name__ == "__main__":
-    dom1 = ['A', 'E', 'O',
-            'P', 'R', 'R',
-            'S', 'W', 'Y']
-    dom2 = ['A', 'E', 'E',
-            'I', 'K', 'L',
-            'L', 'P', 'Y']
-    dict = get_dictionary('3_letters_dictionary')
-    bigram_freq = get_bigram_freq('bigram_frequence_list')
-    problem = FillinStationProblem(dom1, dict, bigram_freq)
 
-    result = backtracking_search(problem)
-    if result is not None:
-        print_matrix(result)
-    else:
-        print "Cannot find any solution!"
-    print problem.count
+def read_command():
+    """
+    Processes the command used to run fill_in_station from CLI.
+    """
+    import argparse
+    parser = argparse.ArgumentParser(description='Fill-in Station')
+
+    parser.add_argument('input', action='store')
+    parser.add_argument('dict', action='store')
+    parser.add_argument('freq', action='store')
+    parser.add_argument('fn', action='store')
+    parser.add_argument('-trace', action='store_true', default=False)
+    return vars(parser.parse_args())
+
+
+def solve_problem(input, dict, freq, fn, trace):
+    """
+        input: input file
+        dict: dictionary file
+        freq: bigram frequence list
+        fn: heuristic function
+        trace: trace mode
+    Solves fill-in station problem with given args.
+    """
+    import time
+    dict = get_dictionary(dict)
+    bigram_freq = get_bigram_freq(freq)
+    domains = []
+    with open(input, 'r') as f:
+        for line in f:
+            domains.append(line.strip().split())
+    count = 0
+    for dom in domains:
+        count += 1
+        problem = FillinStationProblem(dom, dict, bigram_freq)
+        print "***************************************"
+        print "Start solving problem %i:" % count
+        start_time = time.time()
+        result = backtracking_search(problem, fn, trace)
+        if result is not None:
+            print "Found a solution:"
+            print_matrix(result)
+        else:
+            print "Cannot find any solution"
+        print "Finished in %f seconds!" % (time.time() - start_time)
+        print "Expanded %i nodes\n" % problem.count
+
+
+if __name__ == "__main__":
+    args = read_command()
+    solve_problem(**args)
