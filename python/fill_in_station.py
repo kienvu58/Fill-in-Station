@@ -98,6 +98,7 @@ class FillinStationProblem:
 
             if self.check_contraints(next_state):
                 successors.push(next_state, heuristic)
+                self.count += 1
 
         return successors
 
@@ -157,7 +158,9 @@ def advanced_heuristic(bigram_freq, variables, state, next_index, next_value):
         heuristic *= bigram_freq[(prev_value, next_value)]
 
     # vertical
-    if next_index > 2:
+    if next_index in (0, 1, 2):
+        heuristic *= bigram_freq[('$', next_value)]
+    else:
         prev_value = state[variables[next_index - 3]]
         heuristic *= bigram_freq[prev_value, next_value]
 
@@ -181,7 +184,7 @@ def backtracking_search(problem, heuristic_fn, trace):
     Use heuristic to choose which value goes first.
     """
     def recursive_backtracking(state, problem, heuristic_fn, trace):
-        problem.count += 1
+
         if problem.is_goal_state(state):
             return state
 
