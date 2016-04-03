@@ -73,12 +73,12 @@ class FillinStationProblem:
         """
         return len(state) == 9 and self.check_contraints(state)
 
-    def get_successors(self, state, heuristic_fn):
+    def get_next_states(self, state, heuristic_fn):
         """
             state: current state
         Returns priority queue of next states
         """
-        successors = PriorityQueue()
+        next_states = PriorityQueue()
         next_var = len(state)
         curr_domain = self.domain[:]
         for key in state.keys():
@@ -94,10 +94,10 @@ class FillinStationProblem:
             next_state.update({self.variables[next_var]: value})
 
             if self.check_contraints(next_state):
-                successors.push(next_state, heuristic)
+                next_states.push(next_state, heuristic)
                 self.count += 1
 
-        return successors
+        return next_states
 
     def check_contraints(self, state):
         """
@@ -184,14 +184,14 @@ def backtracking_search(problem, heuristic_fn, trace):
         if problem.is_goal_state(state):
             return state
 
-        successors = problem.get_successors(state, heuristic_fn)
-        children = successors.heap[:]
+        next_states = problem.get_next_states(state, heuristic_fn)
+        children = next_states.heap[:]
 
         if trace:
             print_trace(state, children)
 
-        while not successors.isEmpty():
-            next_state = successors.pop()
+        while not next_states.isEmpty():
+            next_state = next_states.pop()
             result = recursive_backtracking(
                 next_state, problem, heuristic_fn, trace)
 
@@ -297,8 +297,8 @@ def solve_problem(input, dict, freq, fn, trace):
     for dom in domains:
         count += 1
         problem = FillinStationProblem(dom, dict, bigram_freq)
-        # print "***************************************"
-        # print "Start solving problem %i:" % count
+        print "***************************************"
+        print "Start solving problem %i:" % count
         start_time = time.time()
         result = backtracking_search(problem, fn, trace)
         if result is not None:
