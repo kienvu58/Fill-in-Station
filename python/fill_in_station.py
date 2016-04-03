@@ -49,16 +49,13 @@ class FillinStationProblem:
             dictionary: a dictionary of 3 letters word
             bigram_freq: bigram frequencies to calculate heuristic
         """
-        self.variables = ('11', '12', '13',
-                          '21', '22', '23',
-                          '31', '32', '33')
+        self.variables = range(9)
         self.domain = domain
         self.dictionary = dictionary
         self.bigram_freq = bigram_freq
-        self.constraints = (
-            ('11', '12', '13'), ('21', '22', '23'), ('31', '32', '33'),
-            ('11', '21', '31'), ('12', '22', '32'), ('13', '23', '33'),
-            ('11', '22', '33'), ('13', '22', '31'))
+        self.constraints = ((0, 1, 2), (3, 4, 5), (6, 7, 8),
+                            (0, 3, 6), (1, 4, 7), (2, 5, 8),
+                            (0, 4, 8), (2, 4, 6))
         self.start_state = {}
         self.count = 0
 
@@ -82,19 +79,19 @@ class FillinStationProblem:
         Returns priority queue of next states
         """
         successors = PriorityQueue()
-        next_index = len(state)
+        next_var = len(state)
         curr_domain = self.domain[:]
         for key in state.keys():
             curr_domain.remove(state[key])
         for value in curr_domain:
             heuristic = heuristic_fn(
-                self.bigram_freq, self.variables, state, next_index, value)
+                self.bigram_freq, self.variables, state, next_var, value)
 
             if heuristic == 0:  # bigram never happens
                 continue
 
             next_state = state.copy()
-            next_state.update({self.variables[next_index]: value})
+            next_state.update({self.variables[next_var]: value})
 
             if self.check_contraints(next_state):
                 successors.push(next_state, heuristic)
@@ -116,62 +113,62 @@ class FillinStationProblem:
         return True
 
 
-def trivial_heuristic(bigram_freq, variables, state, next_index, next_value):
+def trivial_heuristic(bigram_freq, variables, state, next_var, next_value):
     """
     This is a trivial heuristic, it always returns constant value.
     """
     return 1
 
 
-def normal_heuristic(bigram_freq, variables, state, next_index, next_value):
+def normal_heuristic(bigram_freq, variables, state, next_var, next_value):
     """
         state: current state
-        next_index: next variable position in matrix
+        next_var: next variable in matrix
         next_value: value of next variable need to calculate heuristic
     Returns heuristic value for assigning next variable from current state.
     This is a simple heuristic function.
     """
     heuristic = 1
-    if next_index in (0, 3, 6):
+    if next_var in (0, 3, 6):
         heuristic *= bigram_freq[('$', next_value)]
     else:
-        prev_value = state[variables[next_index - 1]]
+        prev_value = state[variables[next_var - 1]]
         heuristic *= bigram_freq[(prev_value, next_value)]
 
     return - heuristic
 
 
-def advanced_heuristic(bigram_freq, variables, state, next_index, next_value):
+def advanced_heuristic(bigram_freq, variables, state, next_var, next_value):
     """
         state: current state
-        next_index: next variable position in matrix
+        next_var: next variable in matrix
         next_value: value of next variable need to calculate heuristic
     Returns heuristic value for assigning next variable from current state.
     This is an advanced heuristic function.
     """
     heuristic = 1
     # horizontal
-    if next_index in (0, 3, 6):
+    if next_var in (0, 3, 6):
         heuristic *= bigram_freq[('$', next_value)]
     else:
-        prev_value = state[variables[next_index - 1]]
+        prev_value = state[variables[next_var - 1]]
         heuristic *= bigram_freq[(prev_value, next_value)]
 
     # vertical
-    if next_index in (0, 1, 2):
+    if next_var in (0, 1, 2):
         heuristic *= bigram_freq[('$', next_value)]
     else:
-        prev_value = state[variables[next_index - 3]]
+        prev_value = state[variables[next_var - 3]]
         heuristic *= bigram_freq[prev_value, next_value]
 
     # main diagonal
-    if next_index in (4, 8):
-        prev_value = state[variables[next_index - 4]]
+    if next_var in (4, 8):
+        prev_value = state[variables[next_var - 4]]
         heuristic *= bigram_freq[prev_value, next_value]
 
     # anti diagonal
-    if next_index in (4, 6):
-        prev_value = state[variables[next_index - 2]]
+    if next_var in (4, 6):
+        prev_value = state[variables[next_var - 2]]
         heuristic *= bigram_freq[prev_value, next_value]
 
     return - heuristic
@@ -184,7 +181,6 @@ def backtracking_search(problem, heuristic_fn, trace):
     Use heuristic to choose which value goes first.
     """
     def recursive_backtracking(state, problem, heuristic_fn, trace):
-
         if problem.is_goal_state(state):
             return state
 
@@ -252,9 +248,9 @@ def print_matrix(state):
         state: current state
     Prints a matrix from current state.
     """
-    matrix = (('11', '12', '13'),
-              ('21', '22', '23'),
-              ('31', '32', '33'))
+    matrix = ((0, 1, 2),
+              (3, 4, 5),
+              (6, 7, 8))
     for row in matrix:
         word = ""
         for col in row:
@@ -301,8 +297,8 @@ def solve_problem(input, dict, freq, fn, trace):
     for dom in domains:
         count += 1
         problem = FillinStationProblem(dom, dict, bigram_freq)
-        print "***************************************"
-        print "Start solving problem %i:" % count
+        # print "***************************************"
+        # print "Start solving problem %i:" % count
         start_time = time.time()
         result = backtracking_search(problem, fn, trace)
         if result is not None:
