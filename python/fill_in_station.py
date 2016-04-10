@@ -1,5 +1,5 @@
 import heapq
-import effective_branching_factor as ebf
+import effective_branching_factor as EBF
 
 
 class PriorityQueue:
@@ -42,7 +42,7 @@ class FillinStationProblem:
     Goal state is a complete set of assignments that satisfies all contraints.
     """
 
-    def __init__(self, domain, dictionary, bigram_freq):
+    def __init__(self, domain, dictionary, bigram_freq=None):
         """
         Constructs a FIS problem. It defines variables, domain and constraints
         for search problem. Initial state is an empty assignment.
@@ -85,8 +85,11 @@ class FillinStationProblem:
         for key in state.keys():
             curr_domain.remove(state[key])
         for value in curr_domain:
-            heuristic = heuristic_fn(
-                self.bigram_freq, self.variables, state, next_var, value)
+            if self.bigram_freq is not None:
+                heuristic = heuristic_fn(
+                    self.bigram_freq, self.variables, state, next_var, value)
+            else:
+                heuristic = 1
 
             if heuristic == 0:  # bigram never happens
                 continue
@@ -310,7 +313,7 @@ def solve_problem(input, dict, freq, fn, trace, ebf=False, disp=True):
 
         if result is not None:
             total_time += elapsed_time
-            total_ebf += ebf.effective_branching_factor(problem.count, 9)
+            # total_ebf += EBF.effective_branching_factor(problem.count, 9)
 
         if disp:
             print "***************************************"
