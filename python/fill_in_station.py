@@ -1,4 +1,5 @@
 import heapq
+import effective_branching_factor as ebf
 
 
 class PriorityQueue:
@@ -277,14 +278,17 @@ def read_command():
     return vars(parser.parse_args())
 
 
-def solve_problem(input, dict, freq, fn, trace):
+def solve_problem(input, dict, freq, fn, trace, ebf=False, disp=True):
     """
         input: input file
         dict: dictionary file
         freq: bigram frequence list
         fn: heuristic function
         trace: trace mode
+        ebf: False - not calculate effective branching factor
+        disp: True - display result
     Solves fill-in station problem with given args.
+    Returns average time & ebf.
     """
     import time
     dict = get_dictionary(dict)
@@ -294,20 +298,33 @@ def solve_problem(input, dict, freq, fn, trace):
         for line in f:
             domains.append(line.strip().split())
     count = 0
+    total_time = 0
+    total_ebf = 0
+
     for dom in domains:
         count += 1
         problem = FillinStationProblem(dom, dict, bigram_freq)
-        print "***************************************"
-        print "Start solving problem %i:" % count
         start_time = time.time()
         result = backtracking_search(problem, fn, trace)
+        elapsed_time = time.time() - start_time
+
         if result is not None:
-            print "Found a solution:"
-            print_matrix(result)
-        else:
-            print "Cannot find any solution"
-        print "Finished in %f seconds!" % (time.time() - start_time)
-        print "Expanded %i nodes\n" % problem.count
+            total_time += elapsed_time
+            total_ebf += ebf.effective_branching_factor(problem.count, 9)
+
+        if disp:
+            print "***************************************"
+            print "Problem %d:" % count
+            if result is not None:
+                print "Found a solution:"
+                print_matrix(result)
+            else:
+                print "Cannot find any solution"
+
+            print "Finished in %f seconds!" % elapsed_time
+            print "Expanded %d nodes\n" % problem.count
+
+    return total_time/count, total_ebf/count
 
 
 if __name__ == "__main__":
