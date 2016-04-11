@@ -79,7 +79,9 @@ Trong python folder
 B1: Vào folder python trong project
 
 B2: Chạy lệnh trên cmd trong folder python đấy
+
 Các lệnh:
+
 1. Khởi tạo input
 python generate_input.py
 
