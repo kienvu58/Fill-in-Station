@@ -6,8 +6,10 @@ Artificial Intelligence Course's Project
 1. [Introduction](#introduction)
 2. [Problem](#problem) 
 3. [Software Requirements](#software-requirements)
-4. [Code Detail](#code-detail)
-5. [Run Code](#run-code)
+4. [Input Output](#input-output)
+5. [Code Detail](#code-detail)
+6. [Run Code](#run-code)
+7. [Special Attention](#special-attention)
 
 
 ----------------------------------------------------------------------
@@ -30,12 +32,25 @@ Fill-in Station là một trò chơi ô chữ bắt đầu bằng một ma trân
 ### Software Requirements
 ----------------------------------------------------------------------
 
--Python 2.7.11
+-Python 2.6.9
 
-Link Download: https://www.python.org/downloads/release/python-2711/
+Link Download: https://www.python.org/download/releases/2.6.9/
 
 Hướng dẫn cài đặt: https://docs.python.org/2/using/
 
+----------------------------------------------------------------------
+### Input Output
+----------------------------------------------------------------------
+
+1. Input
+
+Là tập tin đầu vào của chương trình. File input gồm 100 dòng, mỗi dòng là 1 tập gồm 9 chữ cái. File input được tạo bởi hàm generate_input.py
+
+2. Output
+
+Output được in ra trên cmd.( Cách chạy sẽ được nói chi tiết ở phần sau) Output gồm có kết quả của trò chơi là 1 ma trận 3x3 với các ô chữ thỏa mãn yêu cầu của trò chơi hoặc là sẽ in ra "Cannot find any solution" nếu không tìm được kết quả của bài toán
+
+Ngoài ra, nếu trò chơi có lời giải, màn hình sẽ in ra thời gian để tìm câu trả lời và số node đi qua để tìm đáp án.
 
 ----------------------------------------------------------------------
 ### Code Detail
@@ -59,9 +74,10 @@ Trong python folder
 
   Hàm tạo 100 input ngẫu nhiên cho bài toán
   
-5. input
+5. input - tập tin đầu vào
 
   Kết quả sau khi chạy hàm generate_input.py - 100 input ngẫu nhiên cho bài toán
+  Gồm có 100 dòng - mỗi dòng là tập 9 chữ cái được tạo ngẫu nhiên
   
 6. fill_in_station.py
 
@@ -99,3 +115,13 @@ python fill_in_station.py input 3_letters_dictionary bigram_frequence_list advan
 
 6. Chạy hàm đánh giá thời gian trung bình và giá trị EBF trung bình của 2 hàm đánh giá thường và nâng cao
 python experiment.py
+
+----------------------------------------------------------------------
+### Special Attention
+----------------------------------------------------------------------
+
+1. Code được viết trên python 2.6 nên nếu chạy python 3.0 trở lên, rất có thể sẽ gặp lỗi
+
+2. Khi chạy chương trình giải quyết trò chơi, phải nhập đủ các tham số như trong hướng dẫn
+
+3. Nếu chưa có input, phải khởi tạo input trước khi chạy chương trình 
