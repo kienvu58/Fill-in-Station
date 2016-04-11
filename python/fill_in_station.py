@@ -313,7 +313,7 @@ def solve_problem(input, dict, freq, fn, trace, ebf=False, disp=True):
 
         if result is not None:
             total_time += elapsed_time
-            # total_ebf += EBF.effective_branching_factor(problem.count, 9)
+            total_ebf += EBF.effective_branching_factor(problem.count, 9)
 
         if disp:
             print "***************************************"
