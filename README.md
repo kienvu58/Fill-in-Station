@@ -4,7 +4,7 @@ Artificial Intelligence Course's Project
 # Fill-in-Station
 ----------------------------------------------------------------------
 1. [Introduction](#introduction)
-2. [Problem](#problem) 
+2. [Problem](#problem)
 3. [Software Requirements](#software-requirements)
 4. [Input Output](#input-output)
 5. [Code Details](#code-details)
@@ -18,14 +18,14 @@ Artificial Intelligence Course's Project
 
 Bài tập lớn môn trí tuệ nhân tạo đòi hỏi sinh viên vận dụng các kiến thức về chiến thuật tìm kiếm để giải quyết trò chơi có tên là Fill-in Station.
 
-Báo cáo này trình bày code ,cách chạy chiến thuật để giải quyết bài toán Fill-in Station và các đánh giá về chiến thuật được sử dụng 
+Báo cáo này trình bày code ,cách chạy chiến thuật để giải quyết bài toán Fill-in Station và các đánh giá về chiến thuật được sử dụng
 
 
 ----------------------------------------------------------------------
 ### Problem
 ----------------------------------------------------------------------
 
-Fill-in Station là một trò chơi ô chữ bắt đầu bằng một ma trân 3x3 và 9 chữ cái (chữ cái có thể lặp lại trong danh sách này). Công việc của bạn là viết chương trình giúp bạn điền các chữ cái vào ma trận 3x3 sao cho nếu ta xếp các chữ cái theo hướng của mũi tên thì các chữ cái này tạo thành một từ có nghĩa. 
+Fill-in Station là một trò chơi ô chữ bắt đầu bằng một ma trân 3x3 và 9 chữ cái (chữ cái có thể lặp lại trong danh sách này). Công việc của bạn là viết chương trình giúp bạn điền các chữ cái vào ma trận 3x3 sao cho nếu ta xếp các chữ cái theo hướng của mũi tên thì các chữ cái này tạo thành một từ có nghĩa.
 
 
 ----------------------------------------------------------------------
@@ -61,30 +61,30 @@ Trong python folder
 1. 3_letters_dictionary
 
   Danh sách tất cả các từ có 3 chữ cái trong từ điển ( 972 từ)
-  
+
 2.  bigram_frequence_list
 
   Tần suất xuất hiện của các chữ cái trong từ điển
-  
+
 3. effective_branching_factor.py
 
   Chứa hàm đánh giá effective branching factor thuật toán heuristic
-  
+
 4. generate_input.py
 
-  Hàm tạo 100 input ngẫu nhiên cho bài toán. 
-  
-  Do thực nghiệm chỉ ra việc tạo 100 input ngẫu nhiên sẽ có nhiều trường hợp không tìm được kết quả. Vì để tăng khả năng kiểm tra thuật toán, mỗi dòng sẽ được tạo bằng cách chọn 3 dòng trong từ điển và kiểm tra 5 ràng buộc còn lại. Nếu thỏa mãn thì sẽ điền ra file input 
-  
+  Hàm tạo 100 input ngẫu nhiên cho bài toán.
+
+  Do thực nghiệm chỉ ra việc tạo 100 input ngẫu nhiên sẽ có nhiều trường hợp không tìm được kết quả. Vì để tăng khả năng kiểm tra thuật toán, mỗi dòng sẽ được tạo bằng cách chọn 3 dòng trong từ điển và kiểm tra 5 ràng buộc còn lại. Nếu thỏa mãn thì sẽ điền ra file input
+
 5. input - tập tin đầu vào
 
   Kết quả sau khi chạy hàm generate_input.py - 100 input ngẫu nhiên cho bài toán
   Gồm có 100 dòng - mỗi dòng là tập 9 chữ cái được trộn ngẫu nhiên từ lời giải
-  
+
 6. fill_in_station.py
 
   Chứa lớp mô tả bài toán và giải thuật chương trình - gồm có 2 hàm heuristic là thông thường và nâng cao
-  
+
 7. experiment.py
 
   Hàm chạy ra thời gian trung bình và kết quả EBF trung bình của 2 hàm heuristic thông thường và nâng cao với đầu vào là file input
@@ -98,13 +98,13 @@ B1: Vào folder python trong project
 
 B2: Chạy lệnh trên command line hoặc terminal trong folder python đấy
 
-Các lệnh: 
+Các lệnh:
 
 1. Khởi tạo input
 
 python generate_input.py
 
-2. Chạy chương trình giải quyết bài toán bằng hàm đánh giá thường 
+2. Chạy chương trình giải quyết bài toán bằng hàm đánh giá thường
 
 python fill_in_station.py input 3_letters_dictionary bigram_frequence_list normal_heuristic
 
@@ -136,4 +136,6 @@ python fill_in_station.py input 3_letters_dictionary bigram_frequence_list advan
 
 2. Khi chạy chương trình giải quyết trò chơi, phải nhập đủ các tham số như trong hướng dẫn
 
-3. Nếu chưa có input, phải khởi tạo input trước khi chạy chương trình 
+3. Nếu chưa có input, phải khởi tạo input trước khi chạy chương trình
+
+4. Phần khởi tạo input, chạy lệnh python generate_input.py sẽ tốn thời gian và không có dấu hiêu thông báo trên màn hình
