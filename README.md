@@ -7,7 +7,7 @@ Artificial Intelligence Course's Project
 2. [Problem](#problem) 
 3. [Software Requirements](#software-requirements)
 4. [Input Output](#input-output)
-5. [Code Detail](#code-detail)
+5. [Code Details](#code-details)
 6. [Run Code](#run-code)
 7. [Special Attention](#special-attention)
 
@@ -53,7 +53,7 @@ Output được in ra trên cmd.( Cách chạy sẽ được nói chi tiết ở
 Ngoài ra, nếu trò chơi có lời giải, màn hình sẽ in ra thời gian để tìm câu trả lời và số node đi qua để tìm đáp án.
 
 ----------------------------------------------------------------------
-### Code Detail
+### Code Details
 ----------------------------------------------------------------------
 
 Trong python folder
@@ -64,30 +64,30 @@ Trong python folder
   
 2.  bigram_frequence_list
 
-  Tần suất xuất hiện của các chữ cái trong tiếng anh
+  Tần suất xuất hiện của các chữ cái trong từ điển
   
 3. effective_branching_factor.py
 
-  Hàm đánh giá thuật toán heuristic
+  Chứa hàm đánh giá effective branching factor thuật toán heuristic
   
 4. generate_input.py
 
   Hàm tạo 100 input ngẫu nhiên cho bài toán. 
   
-  Do thực nghiệm chỉ ra việc tạo 100 input ngẫu nhiên sẽ có nhiều trường hợp không tìm được kết quả. Vì để tăng khả năng kiểm tra thuật toán, mỗi dòng sẽ được tạo bằng cách chọn 3 dòng trong từ điển và kiểm tra 5 ràng buộc còn lại.Nếu thỏa mãn thì sẽ điền ra file input 
+  Do thực nghiệm chỉ ra việc tạo 100 input ngẫu nhiên sẽ có nhiều trường hợp không tìm được kết quả. Vì để tăng khả năng kiểm tra thuật toán, mỗi dòng sẽ được tạo bằng cách chọn 3 dòng trong từ điển và kiểm tra 5 ràng buộc còn lại. Nếu thỏa mãn thì sẽ điền ra file input 
   
 5. input - tập tin đầu vào
 
   Kết quả sau khi chạy hàm generate_input.py - 100 input ngẫu nhiên cho bài toán
-  Gồm có 100 dòng - mỗi dòng là tập 9 chữ cái được tạo ngẫu nhiên
+  Gồm có 100 dòng - mỗi dòng là tập 9 chữ cái được trộn ngẫu nhiên từ lời giải
   
 6. fill_in_station.py
 
-  Hàm giải thuật chương trình - gồm có 2 hàm heuristic là thông thường và nâng cao
+  Chứa lớp mô tả bài toán và giải thuật chương trình - gồm có 2 hàm heuristic là thông thường và nâng cao
   
 7. experiment.py
 
-  Hàm chạy ra thời gian trung bình và kết quả EBF trung bình của hàm heuristic thông thường và nâng cao với đầu vào là file input
+  Hàm chạy ra thời gian trung bình và kết quả EBF trung bình của 2 hàm heuristic thông thường và nâng cao với đầu vào là file input
 
 
 ----------------------------------------------------------------------
@@ -123,6 +123,10 @@ python fill_in_station.py input 3_letters_dictionary bigram_frequence_list advan
 6. Chạy hàm đánh giá thời gian trung bình và giá trị EBF trung bình của 2 hàm đánh giá thường và nâng cao với input được khởi tạo như trên
 
 python experiment.py
+
+7. Để xuất kết quả từ màn hình dòng lệnh ra file thêm "> filename" và sau mỗi lệnh, ví dụ
+
+python fill_in_station.py input 3_letters_dictionary bigram_frequence_list advanced_heuristic > log.txt
 
 ----------------------------------------------------------------------
 ### Special Attention
