@@ -72,7 +72,9 @@ Trong python folder
   
 4. generate_input.py
 
-  Hàm tạo 100 input ngẫu nhiên cho bài toán
+  Hàm tạo 100 input ngẫu nhiên cho bài toán. 
+  
+  Do thực nghiệm chỉ ra việc tạo 100 input ngẫu nhiên sẽ có nhiều trường hợp không tìm được kết quả. Vì để tăng khả năng kiểm tra thuật toán, mỗi dòng sẽ được tạo bằng cách chọn 3 dòng trong từ điển và kiểm tra 5 ràng buộc còn lại.Nếu thỏa mãn thì sẽ điền ra file input 
   
 5. input - tập tin đầu vào
 
@@ -85,7 +87,7 @@ Trong python folder
   
 7. experiment.py
 
-  Hàm chạy ra thời gian trung bình và kết quả EBF trung bình của hàm heuristic thông thường và nâng cao
+  Hàm chạy ra thời gian trung bình và kết quả EBF trung bình của hàm heuristic thông thường và nâng cao với đầu vào là file input
 
 
 ----------------------------------------------------------------------
@@ -94,26 +96,32 @@ Trong python folder
 
 B1: Vào folder python trong project
 
-B2: Chạy lệnh trên cmd trong folder python đấy
+B2: Chạy lệnh trên command line hoặc terminal trong folder python đấy
 
-Các lệnh:
+Các lệnh: 
 
 1. Khởi tạo input
+
 python generate_input.py
 
 2. Chạy chương trình giải quyết bài toán bằng hàm đánh giá thường 
+
 python fill_in_station.py input 3_letters_dictionary bigram_frequence_list normal_heuristic
 
 3. Chạy chức năng truy vết khi chương trình giải quyết bài toán hàm toán đánh giá thường
+
 python fill_in_station.py input 3_letters_dictionary bigram_frequence_list normal_heuristic -trace
 
 4. Chạy chương trình giải quyết bài toán bằng hàm đánh giá nâng cao
+
 python fill_in_station.py input 3_letters_dictionary bigram_frequence_list advanced_heuristic
 
 5. Chạy chức năng truy vết khi chương trình giải quyết bài toán bằng hàm đánh giá nâng cao
+
 python fill_in_station.py input 3_letters_dictionary bigram_frequence_list advanced_heuristic -trace
 
-6. Chạy hàm đánh giá thời gian trung bình và giá trị EBF trung bình của 2 hàm đánh giá thường và nâng cao
+6. Chạy hàm đánh giá thời gian trung bình và giá trị EBF trung bình của 2 hàm đánh giá thường và nâng cao với input được khởi tạo như trên
+
 python experiment.py
 
 ----------------------------------------------------------------------
